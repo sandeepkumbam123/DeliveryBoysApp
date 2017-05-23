@@ -16,8 +16,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener{
 Button mPickNow;
@@ -46,7 +52,7 @@ Button mPickNow;
 
     }
 
-    private void trackLocation(String[] fromLocation,String[] toLocation){
+    private void trackLocation(){
 
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("http://maps.google.com/maps?saddr=17.445727,78.381755&daddr=17.447070,78.374155"));
@@ -97,6 +103,7 @@ Button mPickNow;
                             longitude = location.getLongitude();
                             Toast.makeText(getApplicationContext(),"Lat"+latitude+"  "+"Lon"+longitude,Toast.LENGTH_LONG).show();
                             //  sendCustomerNumberAPI(latitude, longitude);
+                            trackLocation();
                         }
                     }
                 }
@@ -114,7 +121,7 @@ Button mPickNow;
                                 longitude = location.getLongitude();
 //sendlattitude longitude
                                 Toast.makeText(getApplicationContext(),"Lat"+latitude+"  "+"Lon"+longitude,Toast.LENGTH_LONG).show();
-
+                                trackLocation();
                             }
 
 
@@ -164,6 +171,7 @@ getLocation();
     @Override
     public void onLocationChanged(Location location) {
 
+
     }
 
     @Override
@@ -180,4 +188,33 @@ getLocation();
     public void onProviderDisabled(String provider) {
 
     }
+
+    public class OrdersListAdapter extends BaseAdapter {
+ArrayList<String> ordersList=new ArrayList<>();
+
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if(convertView==null) {
+                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_orders_view, parent, false);
+            }
+            return convertView;
+        }
+    }
+
 }
