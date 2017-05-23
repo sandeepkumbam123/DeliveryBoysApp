@@ -4,10 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.nanni.myapplication.LoginActivity">
-<Button
-    android:id="@+id/bt_Login"
-    android:text="Login"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    tools:context="com.example.nanni.examapp.activities.LoginActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:text="@string/LOGIN"/>
+        <EditText
+            android:id="@+id/et_userName"
+            android:hint="User name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/et_Password"
+            android:hint="Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <CheckBox
+                android:id="@+id/cb_rememberMe"
+                android:layout_width="wrap_content"
+                android:text="@string/remember_me"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_forgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@string/forgot_pssword"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/bt_Login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="@string/login"/>
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/or"/>
+
+        <TextView
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_with"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/bt_signUP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="@string/dont_have_account_yet"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

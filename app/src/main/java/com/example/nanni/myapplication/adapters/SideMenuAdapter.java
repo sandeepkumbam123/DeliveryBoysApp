@@ -13,7 +13,7 @@ import com.example.nanni.myapplication.R;
  */
 
 public class SideMenuAdapter extends BaseAdapter {
-    String[] sideMenuItems={"Previous Orders","My Account","Logout","V 1.0.0"};
+    String[] sideMenuItems={"Home","Previous Orders","My Account","Logout","V 1.0.0"};
     @Override
     public int getCount() {
         return sideMenuItems.length;
