@@ -14,19 +14,22 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity implements LocationListener{
-Button mPickNow;
+public class HomeActivity extends AppCompatActivity implements LocationListener {
     LocationManager mLocationManager;
     private boolean isGPSEnabled;
     private boolean isNetworkEnabled;
@@ -36,7 +39,7 @@ Button mPickNow;
     public boolean isLocationPermissionGranted;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
+    ListView mOrdersList;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -44,15 +47,16 @@ Button mPickNow;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mPickNow=(Button)findViewById(R.id.bt_pickNow);
+        mOrdersList = (ListView) findViewById(R.id.lv_OrdersList);
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        setAdapter();
+        getMyLocationPermission();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        getMyLocationPermission();
-     mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
     }
 
-    private void trackLocation(){
+    private void trackLocation() {
 
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("http://maps.google.com/maps?saddr=17.445727,78.381755&daddr=17.447070,78.374155"));
@@ -60,8 +64,13 @@ Button mPickNow;
 
     }
 
+    public void setAdapter() {
+        OrdersListAdapter ordersListAdapter = new OrdersListAdapter();
+        mOrdersList.setAdapter(ordersListAdapter);
+    }
+
     private void getMyLocationPermission() {
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -69,8 +78,7 @@ Button mPickNow;
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
-            }
-            else{
+            } else {
                 getLocation();
             }
         }
@@ -101,7 +109,7 @@ Button mPickNow;
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Toast.makeText(getApplicationContext(),"Lat"+latitude+"  "+"Lon"+longitude,Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                             //  sendCustomerNumberAPI(latitude, longitude);
                             trackLocation();
                         }
@@ -120,7 +128,7 @@ Button mPickNow;
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
 //sendlattitude longitude
-                                Toast.makeText(getApplicationContext(),"Lat"+latitude+"  "+"Lon"+longitude,Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                                 trackLocation();
                             }
 
@@ -131,6 +139,7 @@ Button mPickNow;
             }
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -138,18 +147,19 @@ Button mPickNow;
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-getLocation();
+                    getLocation();
                     // permission was granted, yay! Do the
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(),"Please enable location permissions to App",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please enable location permissions to App", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
 
         }
     }
+
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("GPS is settings");
@@ -189,12 +199,13 @@ getLocation();
 
     }
 
+
     public class OrdersListAdapter extends BaseAdapter {
-ArrayList<String> ordersList=new ArrayList<>();
+        ArrayList<String> ordersList = new ArrayList<>();
 
         @Override
         public int getCount() {
-            return 0;
+            return 5;
         }
 
         @Override
@@ -209,10 +220,18 @@ ArrayList<String> ordersList=new ArrayList<>();
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
-            if(convertView==null) {
+            TextView mTV_OrderNum;
+            TextView mTV_OrderName;
+            TextView mTV_OrederDate;
+            Button mBT_Pick;
+            if (convertView == null) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_orders_view, parent, false);
             }
+
+            mTV_OrderNum=(TextView)findViewById(R.id.tv_orderNum);
+            mTV_OrderName=(TextView)findViewById(R.id.tv_orderName);
+            mTV_OrederDate=(TextView)findViewById(R.id.tv_deliveryTime);
+            mBT_Pick=(Button)findViewById(R.id.bt_pickNow);
             return convertView;
         }
     }

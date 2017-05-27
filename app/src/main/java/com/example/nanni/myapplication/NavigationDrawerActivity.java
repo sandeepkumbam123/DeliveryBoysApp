@@ -19,22 +19,25 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
     ActionBarDrawerToggle mActionBarToggle;
     SideMenuAdapter sideMenuRecyclerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
-        mSideMenuList=(ListView)findViewById(R.id.left_drawer);
-        mDrawerLayout=(DrawerLayout)findViewById(R.id.drawer_layout);
+        mSideMenuList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setToolbar();
         setAdapter();
         selectItem(0);
     }
-    public void setAdapter(){
 
-        SideMenuAdapter sideMenuAdapter=new SideMenuAdapter();
+    public void setAdapter() {
+
+        SideMenuAdapter sideMenuAdapter = new SideMenuAdapter();
         mSideMenuList.setAdapter(sideMenuAdapter);
     }
+
     void setToolbar() {
         setupToolbar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -74,19 +77,27 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                     mMenuList.getChildAt(i).setBackgroundColor(getResources().getColor(R.color.white));
                 }
 */
-          mDrawerLayout.closeDrawers();
+            mDrawerLayout.closeDrawers();
             selectItem(position);
 
         }
     }
 
     private void selectItem(int position) {
-        Intent i=null;
-        switch (position){
+        Intent i = null;
+        switch (position) {
             case 0:
-               i =new Intent(NavigationDrawerActivity.this,HomeActivity.class);
+                i = new Intent(NavigationDrawerActivity.this, HomeActivity.class);
+                break;
+            case 1:
+                i = new Intent(NavigationDrawerActivity.this, PreviousOrdersActivity.class);
+                break;
+            case 2:
+                i = new Intent(NavigationDrawerActivity.this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
         }
+
         startActivity(i);
     }
 

@@ -4,16 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.nanni.myapplication.HomeActivity">
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"/>
-
+    tools:context="com.example.nanni.myapplication.PreviousOrdersActivity">
+<include
+    android:id="@+id/toolbar"
+    layout="@layout/layout_toolbar"/>
     <ListView
-    android:id="@+id/lv_OrdersList"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+        android:id="@+id/lv_previousOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</ListView>
+    </ListView>
 </LinearLayout>
