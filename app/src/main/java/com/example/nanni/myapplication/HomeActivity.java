@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity implements LocationListener {
     LocationManager mLocationManager;
     private boolean isGPSEnabled;
+    Intent mapsActivity;
     private boolean isNetworkEnabled;
     private Location location;
     private double latitude;
@@ -40,7 +41,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     ListView mOrdersList;
-
+String sourceAdress="17.445727,78.381755";
+    String destinationAdress="17.447070,78.374155";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
@@ -58,9 +60,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     private void trackLocation() {
 
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?saddr=17.445727,78.381755&daddr=17.447070,78.374155"));
-        startActivity(intent);
+        mapsActivity= new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr="+sourceAdress+"&daddr="+destinationAdress));
+        startActivityForResult(mapsActivity,507);
 
     }
 
@@ -181,6 +183,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onLocationChanged(Location location) {
 
+        if(location.getLatitude()==0 && location.getLongitude()==0){
+            finishActivity(507);
+        }
 
     }
 
@@ -231,7 +236,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             mTV_OrderNum=(TextView)findViewById(R.id.tv_orderNum);
             mTV_OrderName=(TextView)findViewById(R.id.tv_orderName);
             mTV_OrederDate=(TextView)findViewById(R.id.tv_deliveryTime);
-            mBT_Pick=(Button)findViewById(R.id.bt_pickNow);
+            mBT_Pick=(Button)findViewById(R.id.bt_pick);
             return convertView;
         }
     }

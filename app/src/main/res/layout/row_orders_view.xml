@@ -48,6 +48,7 @@
                     android:textColor="@android:color/black"
                     android:layout_height="match_parent" />
                 <Button
+                    android:id="@+id/bt_pick"
                     android:layout_gravity="end"
                     android:text="Pick"
                     android:gravity="center"

@@ -54,7 +54,7 @@ public class PreviousOrdersActivity extends AppCompatActivity {
             mTV_OrderNum=(TextView)findViewById(R.id.tv_orderNum);
             mTV_OrderName=(TextView)findViewById(R.id.tv_orderName);
             mTV_OrederDate=(TextView)findViewById(R.id.tv_deliveryTime);
-            mBT_Pick=(Button)findViewById(R.id.bt_pickNow);
+            mBT_Pick=(Button)findViewById(R.id.bt_pick);
 
             mBT_Pick.setVisibility(View.GONE);
 
