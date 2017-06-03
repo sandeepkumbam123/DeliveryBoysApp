@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     ListView mOrdersList;
-String sourceAdress="17.445727,78.381755";
+    String sourceAdress="17.445727,78.381755";
     String destinationAdress="17.447070,78.374155";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -58,7 +58,7 @@ String sourceAdress="17.445727,78.381755";
 
     }
 
-    private void trackLocation() {
+    private void trackLocation(String sourceAdress) {
 
         mapsActivity= new Intent(android.content.Intent.ACTION_VIEW,
                 Uri.parse("http://maps.google.com/maps?saddr="+sourceAdress+"&daddr="+destinationAdress));
@@ -113,7 +113,7 @@ String sourceAdress="17.445727,78.381755";
                             longitude = location.getLongitude();
                             Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                             //  sendCustomerNumberAPI(latitude, longitude);
-                            trackLocation();
+                            trackLocation(latitude+","+longitude);
                         }
                     }
                 }
@@ -131,7 +131,7 @@ String sourceAdress="17.445727,78.381755";
                                 longitude = location.getLongitude();
 //sendlattitude longitude
                                 Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
-                                trackLocation();
+                                trackLocation(latitude+","+longitude);
                             }
 
 
