@@ -18,7 +18,7 @@ import java.util.List;
 public class PreviousOrdersActivity extends AppCompatActivity {
 
     ListView mPreviousOrderList;
-    DBpreviousOrders dBpreviousOrders;
+    DBpreviousOrders dBpreviousOrders=new DBpreviousOrders(this);
     List<String> ordersList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class PreviousOrdersActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return ordersList.size();
+            return 1;
         }
 
         @Override
@@ -45,7 +45,7 @@ public class PreviousOrdersActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(int position) {
-            return ordersList.size();
+            return 1;
         }
 
         @Override
@@ -64,7 +64,9 @@ public class PreviousOrdersActivity extends AppCompatActivity {
 
             mBT_Pick.setVisibility(View.GONE);
 
-           // mTV_OrderNum.setText(ordersList.get());
+            mTV_OrderNum.setText(ordersList.get(0));
+            mTV_OrderName.setText(ordersList.get(1));
+            mTV_OrederDate.setText(ordersList.get(2));
 
             return convertView;
         }
