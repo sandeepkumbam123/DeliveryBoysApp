@@ -22,7 +22,7 @@ public class DBpreviousOrders extends SQLiteOpenHelper {
     public static final String KEY_ORDER_NAME = "orderName";
     public static final String KEY_ORDERDATE = "orderDate";
 
-
+Context context;
     public DBpreviousOrders(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -42,7 +42,7 @@ public class DBpreviousOrders extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertData(List<String> list) {
+    public  boolean insertData(List<String> list) {
         SQLiteDatabase sqdb = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         for (int i = 0; i < list.size(); i++) {

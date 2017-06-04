@@ -10,26 +10,32 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.nanni.myapplication.util.DBpreviousOrders;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class PreviousOrdersActivity extends AppCompatActivity {
 
     ListView mPreviousOrderList;
+    DBpreviousOrders dBpreviousOrders;
+    List<String> ordersList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_previous_orders);
+        ordersList=new ArrayList<>();
         mPreviousOrderList=(ListView)findViewById(R.id.lv_previousOrders);
-
+        mPreviousOrderList.setAdapter(new OrdersListAdapter());
+        ordersList= dBpreviousOrders.getData();
     }
 
 
     public class OrdersListAdapter extends BaseAdapter {
-        ArrayList<String> ordersList = new ArrayList<>();
 
         @Override
         public int getCount() {
-            return 5;
+            return ordersList.size();
         }
 
         @Override
@@ -39,7 +45,7 @@ public class PreviousOrdersActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return ordersList.size();
         }
 
         @Override
@@ -57,6 +63,8 @@ public class PreviousOrdersActivity extends AppCompatActivity {
             mBT_Pick=(Button)findViewById(R.id.bt_pick);
 
             mBT_Pick.setVisibility(View.GONE);
+
+           // mTV_OrderNum.setText(ordersList.get());
 
             return convertView;
         }

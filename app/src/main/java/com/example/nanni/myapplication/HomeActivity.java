@@ -41,10 +41,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     ListView mOrdersList;
-    String sourceAdress="17.445727,78.381755";
-    String destinationAdress="17.447070,78.374155";
+    String sourceAdress = "17.445727,78.381755";
+    String destinationAdress1 = "17.447070,78.374155";
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
+    String[] orderNum = {"1", "2", "3", "4", "5", "6"};
+    String[] orderName = {"Chicken", "Bone Less Chicken", "Freash Meat", "Chicken", "Eggs", "Special chicken"};
+    String[] orderDate = {"02/06/2017", "03/06/2017", "04/06/2017", "05/06/2017", "06/06/2107", "07/06/2017"};
+    int positionClicked=0;
+    String[] destinationAdress={"17.485232,78.394104","17.447070,78.374155","17.4868949, 78.3907834","17.485232," +
+            "78.394104","17.447070,78.374155","17.4868949, 78.3907834"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,23 +57,37 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         mOrdersList = (ListView) findViewById(R.id.lv_OrdersList);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         setAdapter();
+
         getMyLocationPermission();
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-
     }
 
     private void trackLocation(String sourceAdress) {
 
-        mapsActivity= new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?saddr="+sourceAdress+"&daddr="+destinationAdress));
-        startActivityForResult(mapsActivity,507);
+        mapsActivity = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr=" + sourceAdress + "&daddr="
+                        + destinationAdress[positionClicked]));
+        startActivityForResult(mapsActivity, 507);
 
     }
 
     public void setAdapter() {
         OrdersListAdapter ordersListAdapter = new OrdersListAdapter();
         mOrdersList.setAdapter(ordersListAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 507:
+                Intent i=new Intent(getApplicationContext(),DeliveredButton.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("OrderNum",orderNum[positionClicked]);
+                bundle.putString("OrderName",orderName[positionClicked]);
+                bundle.putString("OrderDate",orderDate[positionClicked]);
+                startActivity(i,bundle);
+
+        }
     }
 
     private void getMyLocationPermission() {
@@ -81,7 +100,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
             } else {
-                getLocation();
+               // getLocation();
             }
         }
 
@@ -113,7 +132,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                             longitude = location.getLongitude();
                             Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                             //  sendCustomerNumberAPI(latitude, longitude);
-                            trackLocation(latitude+","+longitude);
+                            trackLocation(latitude + "," + longitude);
                         }
                     }
                 }
@@ -131,7 +150,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                                 longitude = location.getLongitude();
 //sendlattitude longitude
                                 Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
-                                trackLocation(latitude+","+longitude);
+                                trackLocation(latitude + "," + longitude);
                             }
 
 
@@ -183,7 +202,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onLocationChanged(Location location) {
 
-        if(location.getLatitude()==0 && location.getLongitude()==0){
+        if (location.getLatitude() == 0 && location.getLongitude() == 0) {
             finishActivity(507);
         }
 
@@ -206,11 +225,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
 
     public class OrdersListAdapter extends BaseAdapter {
-        ArrayList<String> ordersList = new ArrayList<>();
+
+
 
         @Override
         public int getCount() {
-            return 5;
+            return 6;
         }
 
         @Override
@@ -224,7 +244,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             TextView mTV_OrderNum;
             TextView mTV_OrderName;
             TextView mTV_OrederDate;
@@ -233,10 +253,20 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_orders_view, parent, false);
             }
 
-            mTV_OrderNum=(TextView)findViewById(R.id.tv_orderNum);
-            mTV_OrderName=(TextView)findViewById(R.id.tv_orderName);
-            mTV_OrederDate=(TextView)findViewById(R.id.tv_deliveryTime);
-            mBT_Pick=(Button)findViewById(R.id.bt_pick);
+            mTV_OrderNum = (TextView) findViewById(R.id.tv_orderNum);
+            mTV_OrderName = (TextView) findViewById(R.id.tv_orderName);
+            mTV_OrederDate = (TextView) findViewById(R.id.tv_deliveryTime);
+            mTV_OrderNum.setText(orderNum[position]);
+            mTV_OrderName.setText(orderName[position]);
+            mTV_OrederDate.setText(orderDate[position]);
+            mBT_Pick = (Button) findViewById(R.id.bt_pick);
+            mBT_Pick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    positionClicked=position;
+                    getLocation();
+                }
+            });
             return convertView;
         }
     }
