@@ -85,7 +85,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 bundle.putString("OrderNum",orderNum[positionClicked]);
                 bundle.putString("OrderName",orderName[positionClicked]);
                 bundle.putString("OrderDate",orderDate[positionClicked]);
-                startActivity(i,bundle);
+                i.putExtras(bundle);
+                startActivity(i);
 
         }
     }

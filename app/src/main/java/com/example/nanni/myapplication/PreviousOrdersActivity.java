@@ -57,10 +57,10 @@ public class PreviousOrdersActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_orders_view, parent, false);
             }
-            mTV_OrderNum=(TextView)findViewById(R.id.tv_orderNum);
-            mTV_OrderName=(TextView)findViewById(R.id.tv_orderName);
-            mTV_OrederDate=(TextView)findViewById(R.id.tv_deliveryTime);
-            mBT_Pick=(Button)findViewById(R.id.bt_pick);
+            mTV_OrderNum=(TextView)convertView.findViewById(R.id.tv_orderNum);
+            mTV_OrderName=(TextView)convertView.findViewById(R.id.tv_orderName);
+            mTV_OrederDate=(TextView)convertView.findViewById(R.id.tv_deliveryTime);
+            mBT_Pick=(Button)convertView.findViewById(R.id.bt_pick);
 
             mBT_Pick.setVisibility(View.GONE);
 
