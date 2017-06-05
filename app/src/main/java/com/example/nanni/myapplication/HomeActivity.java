@@ -253,13 +253,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_orders_view, parent, false);
             }
 
-            mTV_OrderNum = (TextView) findViewById(R.id.tv_orderNum);
-            mTV_OrderName = (TextView) findViewById(R.id.tv_orderName);
-            mTV_OrederDate = (TextView) findViewById(R.id.tv_deliveryTime);
+            mTV_OrderNum = (TextView)convertView. findViewById(R.id.tv_orderNum);
+            mTV_OrderName = (TextView)convertView. findViewById(R.id.tv_orderName);
+            mTV_OrederDate = (TextView) convertView.findViewById(R.id.tv_deliveryTime);
             mTV_OrderNum.setText(orderNum[position]);
             mTV_OrderName.setText(orderName[position]);
             mTV_OrederDate.setText(orderDate[position]);
-            mBT_Pick = (Button) findViewById(R.id.bt_pick);
+            mBT_Pick = (Button) convertView .findViewById(R.id.bt_pick);
             mBT_Pick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
