@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.nanni.myapplication.HomeActivity">
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"/>
+
 
     <ListView
     android:id="@+id/lv_OrdersList"

@@ -1,45 +1,58 @@
 package com.example.nanni.myapplication;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.nanni.myapplication.apiutils.OrderBean;
 import com.example.nanni.myapplication.util.DBpreviousOrders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveredButton extends AppCompatActivity {
+public class DeliveredButton extends Fragment {
 Button mbt_Deliver;
-    List<String> deliveryDetailsList;
+    List<OrderBean> deliveryDetailsList;
     DBpreviousOrders dBpreviousOrders;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delivered_button);
-        mbt_Deliver=(Button)findViewById(R.id.bt_deliver);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.activity_delivered_button,container,false);
+        mbt_Deliver=(Button)view.findViewById(R.id.bt_deliver);
         deliveryDetailsList=new ArrayList<>();
-        Bundle bundle=getIntent().getExtras();
+
+        Bundle bundle=getArguments();
+
         if(bundle!=null){
-          String orderNum=  bundle.getString("OrderNum");
+            String orderNum=  bundle.getString("OrderNum");
             String orderName=bundle.getString("OrderName");
             String orderDAte=bundle.getString("OrderDate");
-            deliveryDetailsList.add(orderNum);
-            deliveryDetailsList.add(orderName);
-            deliveryDetailsList.add(orderDAte);
+            OrderBean orderBean=new OrderBean();
+            orderBean.setOrderNumber(orderNum);
+            orderBean.setOrderName(orderName);
+            orderBean.setOrderDate(orderDAte);
+            deliveryDetailsList.add(orderBean);
+
         }
 
         mbt_Deliver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dBpreviousOrders=new DBpreviousOrders(getApplicationContext());
-                dBpreviousOrders.insertData(deliveryDetailsList);
-                Intent intent=new Intent(getApplicationContext(),PreviousOrdersActivity.class);
-                startActivity(intent);
+
+                dBpreviousOrders.getInstance().insertData(deliveryDetailsList);
+               getFragmentManager().beginTransaction().replace(R.id.content_frame,new PreviousOrdersActivity()).commit();
             }
         });
+
+
+        return view;
     }
+
+
+
 }

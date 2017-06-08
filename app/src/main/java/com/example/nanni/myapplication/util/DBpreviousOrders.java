@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.nanni.myapplication.apiutils.OrderBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +23,15 @@ public class DBpreviousOrders extends SQLiteOpenHelper {
     public static final String KEY_ORDER_NUMBER = "orderNum";
     public static final String KEY_ORDER_NAME = "orderName";
     public static final String KEY_ORDERDATE = "orderDate";
+    private static DBpreviousOrders databaseInstance = null;
+    Context context;
 
-Context context;
     public DBpreviousOrders(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static DBpreviousOrders getInstance() {
+        return databaseInstance;
     }
 
     @Override
@@ -42,28 +49,32 @@ Context context;
 
     }
 
-    public  boolean insertData(List<String> list) {
+    public boolean insertData(List<OrderBean> list) {
         SQLiteDatabase sqdb = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         for (int i = 0; i < list.size(); i++) {
-            cv.put(KEY_ORDER_NUMBER, list.get(i));
-            cv.put(KEY_ORDER_NAME,list.get(i));
-            cv.put(KEY_ORDERDATE,list.get(i));
+            cv.put(KEY_ORDER_NUMBER, list.get(i).getOrderNumber());
+            cv.put(KEY_ORDER_NAME, list.get(i).getOrderName());
+            cv.put(KEY_ORDERDATE, list.get(i).getOrderDate());
             sqdb.insert(TABLE_NAME, null, cv);
-            Log.d("inserted into", list.get(i));
+            Log.d("inserted into", list.get(i).getOrderDate());
         }
-return true;
+        return true;
     }
 
-    public List<String> getData() {
-        List<String> wishes = new ArrayList<String>();
+    public List<OrderBean> getData() {
+        List<OrderBean> wishes = new ArrayList<>();
+
         SQLiteDatabase sqdb = this.getReadableDatabase();
         Cursor cur = sqdb.rawQuery("select * from " + TABLE_NAME, null);
         cur.moveToFirst();
         while (cur.isAfterLast() == false) {
-            wishes.add(cur.getString(cur.getColumnIndex(KEY_ORDER_NUMBER)));
-            wishes.add(cur.getString(cur.getColumnIndex(KEY_ORDER_NAME)));
-            wishes.add(cur.getString(cur.getColumnIndex(KEY_ORDERDATE)));
+            OrderBean orderBean = new OrderBean();
+            orderBean.setOrderDate(cur.getString(cur.getColumnIndex(KEY_ORDERDATE)));
+            orderBean.setOrderName(cur.getString(cur.getColumnIndex(KEY_ORDER_NAME)));
+            orderBean.setOrderNumber(cur.getString(cur.getColumnIndex(KEY_ORDER_NUMBER)));
+
+            wishes.add(orderBean);
             cur.moveToNext();
 
         }
@@ -71,6 +82,7 @@ return true;
 
         return wishes;
     }
+
     public void updateData(int id) {
         SQLiteDatabase sqdb = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -78,4 +90,4 @@ return true;
         sqdb.update(TABLE_NAME, values, "id=" + id, new String[]{String.valueOf(id)});
     }
 
-    }
+}

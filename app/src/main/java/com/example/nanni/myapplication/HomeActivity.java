@@ -12,24 +12,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
-public class HomeActivity extends AppCompatActivity implements LocationListener {
+public class HomeActivity extends Fragment implements LocationListener {
     LocationManager mLocationManager;
     private boolean isGPSEnabled;
     Intent mapsActivity;
@@ -41,8 +38,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
     ListView mOrdersList;
-    String sourceAdress = "17.445727,78.381755";
-    String destinationAdress1 = "17.447070,78.374155";
+
+  /*  String sourceAdress = "17.445727,78.381755";
+    String destinationAdress1 = "17.447070,78.374155";*/
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     String[] orderNum = {"1", "2", "3", "4", "5", "6"};
     String[] orderName = {"Chicken", "Bone Less Chicken", "Freash Meat", "Chicken", "Eggs", "Special chicken"};
@@ -50,16 +48,21 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     int positionClicked=0;
     String[] destinationAdress={"17.485232,78.394104","17.447070,78.374155","17.4868949, 78.3907834","17.485232," +
             "78.394104","17.447070,78.374155","17.4868949, 78.3907834"};
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        mOrdersList = (ListView) findViewById(R.id.lv_OrdersList);
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.activity_home,container,false);
+        mOrdersList = (ListView) view.findViewById(R.id.lv_OrdersList);
+        mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
         setAdapter();
 
         getMyLocationPermission();
+
+        return view;
     }
+
+
 
     private void trackLocation(String sourceAdress) {
 
@@ -76,27 +79,26 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 507:
-                Intent i=new Intent(getApplicationContext(),DeliveredButton.class);
+               DeliveredButton deliveredButton=new DeliveredButton();
                 Bundle bundle=new Bundle();
                 bundle.putString("OrderNum",orderNum[positionClicked]);
                 bundle.putString("OrderName",orderName[positionClicked]);
                 bundle.putString("OrderDate",orderDate[positionClicked]);
-                i.putExtras(bundle);
-                startActivity(i);
-
+                deliveredButton.setArguments(bundle);
+               getFragmentManager().beginTransaction().replace(R.id.content_frame,deliveredButton).commit();
         }
     }
 
     private void getMyLocationPermission() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            if (ContextCompat.checkSelfPermission(this,
+            if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(HomeActivity.this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
@@ -114,10 +116,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         if (!isGPSEnabled && !isNetworkEnabled) {
             showSettingsAlert();
         } else {
-            if (ActivityCompat.checkSelfPermission(this,
+            if (ActivityCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 isLocationPermissionGranted = false;
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             } else {
@@ -131,7 +133,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                             //  sendCustomerNumberAPI(latitude, longitude);
                             trackLocation(latitude + "," + longitude);
                         }
@@ -149,8 +151,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                             if (location != null) {
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-//sendlattitude longitude
-                                Toast.makeText(getApplicationContext(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
+
+                                Toast.makeText(getActivity(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                                 trackLocation(latitude + "," + longitude);
                             }
 
@@ -174,7 +176,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "Please enable location permissions to App", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Please enable location permissions to App", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -183,7 +185,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setTitle("GPS is settings");
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
@@ -203,9 +205,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     @Override
     public void onLocationChanged(Location location) {
 
-        if (location.getLatitude() == 0 && location.getLongitude() == 0) {
-            finishActivity(507);
-        }
+        String lat=location.getLatitude()+"";
+        String lon=location.getLongitude()+"";
+        String destLat[]=destinationAdress[0].split(",");
+
+        if (lat.equalsIgnoreCase( destLat[0])&& lon.equalsIgnoreCase(destLat[1])) {
+           getActivity(). finishActivity(507);
+            }
 
     }
 

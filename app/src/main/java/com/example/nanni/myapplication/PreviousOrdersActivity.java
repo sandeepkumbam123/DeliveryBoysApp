@@ -1,7 +1,8 @@
 package com.example.nanni.myapplication;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,42 +11,48 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.nanni.myapplication.apiutils.OrderBean;
 import com.example.nanni.myapplication.util.DBpreviousOrders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreviousOrdersActivity extends AppCompatActivity {
+public class PreviousOrdersActivity extends Fragment {
 
     ListView mPreviousOrderList;
-    DBpreviousOrders dBpreviousOrders=new DBpreviousOrders(this);
-    List<String> ordersList;
+    DBpreviousOrders dBpreviousOrders=new DBpreviousOrders(getActivity());
+    List<OrderBean> ordersList;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_previous_orders);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.activity_previous_orders,container,false);
+
         ordersList=new ArrayList<>();
-        mPreviousOrderList=(ListView)findViewById(R.id.lv_previousOrders);
+        mPreviousOrderList=(ListView)view.findViewById(R.id.lv_previousOrders);
         mPreviousOrderList.setAdapter(new OrdersListAdapter());
-        ordersList= dBpreviousOrders.getData();
+        ordersList= dBpreviousOrders.getInstance().getData();
+        return view;
     }
+
+
 
 
     public class OrdersListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
-            return 1;
+            return ordersList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
+            return position;
         }
 
         @Override
         public long getItemId(int position) {
-            return 1;
+            return position;
         }
 
         @Override
@@ -64,9 +71,9 @@ public class PreviousOrdersActivity extends AppCompatActivity {
 
             mBT_Pick.setVisibility(View.GONE);
 
-            mTV_OrderNum.setText(ordersList.get(0));
-            mTV_OrderName.setText(ordersList.get(1));
-            mTV_OrederDate.setText(ordersList.get(2));
+            mTV_OrderNum.setText(ordersList.get(position).getOrderNumber());
+            mTV_OrderName.setText(ordersList.get(position).getOrderName());
+            mTV_OrederDate.setText(ordersList.get(position).getOrderDate());
 
             return convertView;
         }
