@@ -23,6 +23,8 @@ Button mbt_Deliver;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.activity_delivered_button,container,false);
+
+        dBpreviousOrders = new DBpreviousOrders(getActivity());
         mbt_Deliver=(Button)view.findViewById(R.id.bt_deliver);
         deliveryDetailsList=new ArrayList<>();
 
@@ -44,7 +46,7 @@ Button mbt_Deliver;
             @Override
             public void onClick(View v) {
 
-                dBpreviousOrders.getInstance().insertData(deliveryDetailsList);
+                dBpreviousOrders.insertData(deliveryDetailsList);
                getFragmentManager().beginTransaction().replace(R.id.content_frame,new PreviousOrdersActivity()).commit();
             }
         });

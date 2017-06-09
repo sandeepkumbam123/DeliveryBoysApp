@@ -31,8 +31,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         setupToolbar();
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
-        SideMenuAdapter adapter = new SideMenuAdapter();
-        mSideMenuList.setAdapter(adapter);
+        sideMenuRecyclerAdapter = new SideMenuAdapter();
+        mSideMenuList.setAdapter(sideMenuRecyclerAdapter);
         mSideMenuList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);

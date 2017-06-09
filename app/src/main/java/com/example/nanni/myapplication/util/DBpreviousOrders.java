@@ -23,16 +23,12 @@ public class DBpreviousOrders extends SQLiteOpenHelper {
     public static final String KEY_ORDER_NUMBER = "orderNum";
     public static final String KEY_ORDER_NAME = "orderName";
     public static final String KEY_ORDERDATE = "orderDate";
-    private static DBpreviousOrders databaseInstance = null;
     Context context;
 
     public DBpreviousOrders(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static DBpreviousOrders getInstance() {
-        return databaseInstance;
-    }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {

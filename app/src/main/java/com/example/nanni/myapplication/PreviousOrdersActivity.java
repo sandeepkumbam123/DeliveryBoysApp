@@ -20,7 +20,7 @@ import java.util.List;
 public class PreviousOrdersActivity extends Fragment {
 
     ListView mPreviousOrderList;
-    DBpreviousOrders dBpreviousOrders=new DBpreviousOrders(getActivity());
+    DBpreviousOrders dBpreviousOrders;
     List<OrderBean> ordersList;
 
     @Nullable
@@ -29,9 +29,10 @@ public class PreviousOrdersActivity extends Fragment {
         View view=inflater.inflate(R.layout.activity_previous_orders,container,false);
 
         ordersList=new ArrayList<>();
+        dBpreviousOrders=new DBpreviousOrders(getActivity());
+        ordersList= dBpreviousOrders.getData();
         mPreviousOrderList=(ListView)view.findViewById(R.id.lv_previousOrders);
         mPreviousOrderList.setAdapter(new OrdersListAdapter());
-        ordersList= dBpreviousOrders.getInstance().getData();
         return view;
     }
 
