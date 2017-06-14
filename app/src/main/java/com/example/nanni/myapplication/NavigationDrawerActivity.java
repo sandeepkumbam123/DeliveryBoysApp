@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.nanni.myapplication.adapters.SideMenuAdapter;
+import com.example.nanni.myapplication.util.Utils;
 
 public class NavigationDrawerActivity extends AppCompatActivity {
 
@@ -83,6 +84,8 @@ public class NavigationDrawerActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().add(R.id.content_frame,new PreviousOrdersActivity()).commit();
                 break;
             case 2:
+                Utils.saveCheckButtonStatus(this,false);
+                Utils.saveUserNamePassword(this,"","");
                 i = new Intent(NavigationDrawerActivity.this, LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);

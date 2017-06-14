@@ -33,6 +33,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!Utils.getUserNamePasssword(this).isEmpty() && !Utils.getPrefPassword(this).isEmpty()){
+            startActivity(new Intent(this,NavigationDrawerActivity.class));
+        }
         setContentView(R.layout.activity_login);
         mBT_Login = (Button) findViewById(R.id.bt_Login);
         mCb_RememberMe = (CheckBox) findViewById(R.id.cb_rememberMe);
@@ -50,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               invokeLoginWithEmail();          }
+                invokeLoginWithEmail();          }
         });
     }
 
@@ -88,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("ERROR", loginResponse.getError());
                         Toast.makeText(getApplicationContext(), loginResponse.getError(), Toast.LENGTH_SHORT).show();
                     } else {
-                       // Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), "User Login Successful", Toast.LENGTH_SHORT).show();
                         if (mCb_RememberMe.isChecked()) {
                             Utils.saveCheckButtonStatus(getApplicationContext(), true);
                             Utils.saveUserNamePassword(getApplicationContext(), mET_Username.getText().toString(), mEt_Password.getText().toString());
