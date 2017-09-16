@@ -363,7 +363,6 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
                     deliveryDetailsList.add(orderBean);
                     db.insertData(deliveryDetailsList);
                     updateDeliveryDetails(deliveryDetailsList);
-                    Toast.makeText(getActivity(), "Order has been delivered succesfully.", Toast.LENGTH_SHORT).show();
                 }
             });
             dialog.show();
