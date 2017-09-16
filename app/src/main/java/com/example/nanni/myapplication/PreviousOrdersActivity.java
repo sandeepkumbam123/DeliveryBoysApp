@@ -1,20 +1,15 @@
 package com.example.nanni.myapplication;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nanni.myapplication.apiutils.OrderBean;
 import com.example.nanni.myapplication.util.DBpreviousOrders;
@@ -22,7 +17,11 @@ import com.example.nanni.myapplication.util.DBpreviousOrders;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PreviousOrdersActivity extends Fragment implements OrderInfoListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class PreviousOrdersActivity extends Fragment  {
 
     ListView mPreviousOrderList;
     DBpreviousOrders dBpreviousOrders;
@@ -36,48 +35,15 @@ public class PreviousOrdersActivity extends Fragment implements OrderInfoListene
         ordersList=new ArrayList<>();
         dBpreviousOrders=new DBpreviousOrders(getActivity());
         ordersList= dBpreviousOrders.getData();
+
+
         mPreviousOrderList=(ListView)view.findViewById(R.id.lv_previousOrders);
-        mPreviousOrderList.setAdapter(new OrdersListAdapter(this));
+        mPreviousOrderList.setAdapter(new OrdersListAdapter());
         return view;
     }
 
 
-
-    private void showDialog() {
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        final View dialogView = inflater.inflate(R.layout.order_details, null);
-        final TextView orderName = (TextView) dialogView.findViewById(R.id.tv_orderName);
-        final TextView orderAddress = (TextView) dialogView.findViewById(R.id.tv_order_address);
-        final TextView orderId = (TextView) dialogView.findViewById(R.id.tv_orderId);
-        final TextView orderType = (TextView) dialogView.findViewById(R.id.tv_order_type);
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(dialogView);
-        dialog.findViewById(R.id.bt_okay).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-    }
-
-
-    @Override
-    public void onClick(int position) {
-        showDialog();
-        Toast.makeText(getActivity(), "Details of the Order will be soon available on a dialog", Toast.LENGTH_SHORT).show();
-    }
-
-
-    public class OrdersListAdapter extends BaseAdapter {
-        OrderInfoListener listener;
-
-        public OrdersListAdapter(OrderInfoListener listener) {
-         this.listener = listener;
-        }
+        public class OrdersListAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -86,7 +52,7 @@ public class PreviousOrdersActivity extends Fragment implements OrderInfoListene
 
         @Override
         public Object getItem(int position) {
-            return position;
+            return position ;
         }
 
         @Override
@@ -110,16 +76,10 @@ public class PreviousOrdersActivity extends Fragment implements OrderInfoListene
 
             mBT_Pick.setVisibility(View.GONE);
 
-            mTV_OrderNum.setText(ordersList.get(position).getOrderNumber());
+            mTV_OrderNum.setText("OrderNumber : "+ordersList.get(position).getOrderNumber());
             mTV_OrderName.setText(ordersList.get(position).getOrderName());
             mTV_OrederDate.setText(ordersList.get(position).getOrderDate());
 
-            mTV_OrderNum.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onClick(position);
-                }
-            });
 
             return convertView;
         }

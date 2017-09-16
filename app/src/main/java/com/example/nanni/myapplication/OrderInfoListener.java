@@ -7,4 +7,6 @@ package com.example.nanni.myapplication;
 public interface OrderInfoListener {
 
         void onClick(int position);
+
+        void onPickClick(int position);
 }

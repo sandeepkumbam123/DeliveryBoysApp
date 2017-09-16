@@ -14,6 +14,7 @@ public class Utils {
     private static final String PREF_USERNAME = "username";
     private static final String PREF_PASSWORD = "password";
     private static final String PREF_ISCHECKED = "IsChecked";
+    public static final String ORDER_PICKED = "ORDER_PICKED";
 
     public static void saveUserNamePassword(Context context,String userName,String password)
     {
