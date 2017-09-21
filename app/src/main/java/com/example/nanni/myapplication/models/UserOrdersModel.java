@@ -61,7 +61,7 @@ public class UserOrdersModel {
         "ord_payment_bankid": ""
     }*/
 
-    @SerializedName("ord_id")
+    @SerializedName("ord_order_number")
     @Expose
     private String mOrderId;
     @SerializedName("ord_demo_bill_name")
