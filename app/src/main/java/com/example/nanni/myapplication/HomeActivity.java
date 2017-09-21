@@ -65,7 +65,7 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
 
 
     String destinationAdress1 = "17.447070,78.374155";
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    public static final int MY_PERMISSIONS_REQUEST_CALL = 99;
     int positionClicked=0;
 
     @Nullable
@@ -77,6 +77,8 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
         mOrdersList = (ListView) view.findViewById(R.id.lv_OrdersList);
 
         getOrderDetails();
+
+        requestPermissions();
 
 
         mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
@@ -316,6 +318,12 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
             mTV_OrederDate=(TextView)convertView.findViewById(R.id.tv_deliveryTime);
             mBT_Pick=(Button)convertView.findViewById(R.id.bt_pick);
 
+            mTV_OrderName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onCallClick(position);
+                }
+            });
             mBT_Pick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -398,5 +406,50 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
             }
         });
 
+    }
+
+    @Override
+    public void onCallClick(int position) {
+        final UserOrdersModel order = userOrdersList.get(position);
+
+        if(order.getCustomerPhoneNumber() != null) {
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + order.getCustomerPhoneNumber()));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL :
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permissagion was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    Toast.makeText(getActivity(), "You need to allow calls to get in contact with the Customer .", Toast.LENGTH_SHORT).show();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+
+        }
+    }
+
+    public void requestPermissions(){
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION ,Manifest.permission.CALL_PHONE},
+                    MY_PERMISSIONS_REQUEST_CALL);
+        }
     }
 }
