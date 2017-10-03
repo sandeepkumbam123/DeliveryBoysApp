@@ -64,7 +64,7 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
     ApiInterface apiService;
 
 
-    String destinationAdress1 = "17.447070,78.374155";
+    String destinationAdress1 = "17.3478735,78.5412692";
     public static final int MY_PERMISSIONS_REQUEST_CALL = 99;
     int positionClicked=0;
 
@@ -95,9 +95,10 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
 
     private void showDialog( int position) {
 
-        UserOrdersModel userModel = userOrdersList.get(position);
+        final UserOrdersModel userModel = userOrdersList.get(position);
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         final View dialogView = inflater.inflate(R.layout.order_details, null);
+        final Button orderDeliver = (Button) dialogView.findViewById(R.id.bt_delivery);
         final TextView orderName = (TextView) dialogView.findViewById(R.id.tv_orderName);
         final TextView orderAddress = (TextView) dialogView.findViewById(R.id.tv_order_address);
         final TextView orderId = (TextView) dialogView.findViewById(R.id.tv_orderId);
@@ -113,6 +114,13 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
 
         final AlertDialog dialog1 = dialog.show();
 
+        orderDeliver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDeliveredList(userModel.getmOrderId());
+            }
+        });
+
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,6 +132,29 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
 
     }
 
+    private void updateDeliveredList(final String orderNumber) {
+        ApiInterface serviceCall = APIclient.getClient().create(ApiInterface.class);
+        UpdateOrderStatus bean = new UpdateOrderStatus(orderNumber,
+                Utils.ORDER_DELIVERED);
+        Call<Object> updatedeliveredProducts = serviceCall.updateOrderStatus(bean);
+        updatedeliveredProducts.enqueue(new Callback<Object>() {
+
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.d("Cancel Response : ", response.body().toString());
+                if (((LinkedTreeMap) response.body()).get("status").equals("failed")) {
+                    Toast.makeText(getActivity(), "order " + orderNumber + " can't be updated  at this point of time. ", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "order " + orderNumber + " has been successfully updated and delivered . ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Toast.makeText(getActivity(), "Internal Error occured", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void getOrderDetails() {
 
@@ -402,7 +433,7 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(getActivity(), "Internal error occured .", Toast.LENGTH_SHORT).show();
             }
         });
 

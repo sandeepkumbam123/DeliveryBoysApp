@@ -88,7 +88,7 @@ public class UserOrdersModel {
     @SerializedName("ord_demo_phone")
     @Expose
     private String customerPhoneNumber;
-    @SerializedName("Cash On Delivery")
+    @SerializedName("ord_payment_mode")
     @Expose
     private String orderPaymentType;
     @SerializedName("ord_user_latitude")

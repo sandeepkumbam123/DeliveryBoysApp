@@ -77,7 +77,7 @@ public class DeliveredButton extends Fragment {
 
     private void updateDeliveredList(List<OrderBean> list) {
         UpdateOrderStatus bean = new UpdateOrderStatus(list.get(0).getOrderNumber(),
-                Utils.ORDER_PICKED);
+                Utils.ORDER_DELIVERED);
         Call<Object> updatedeliveredProducts = serviceCall.updateOrderStatus(bean);
         updatedeliveredProducts.enqueue(new Callback<Object>() {
 
