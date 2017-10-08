@@ -75,13 +75,14 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
         apiService =
                 APIclient.getClient().create(ApiInterface.class);
         mOrdersList = (ListView) view.findViewById(R.id.lv_OrdersList);
+        mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
         getOrderDetails();
 
         requestPermissions();
 
 
-        mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
+
 
 
 
@@ -183,10 +184,10 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
     }
 
     private void trackLocation(String sourceAdress) {
-
+         getLocation();
         mapsActivity = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("http://maps.google.com/maps?saddr=" + sourceAdress + "&daddr="
-                        + destinationAdress1));
+                Uri.parse("http://maps.google.com/maps?saddr=" + destinationAdress1 + "&daddr="
+                        + sourceAdress));
         startActivityForResult(mapsActivity, 507);
 
     }
@@ -213,9 +214,9 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
 
 
 
-   /* private void getLocation() {
+    private void getLocation() {
         isGPSEnabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
+        Location location = new Location("");
         isNetworkEnabled = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         if (!isGPSEnabled && !isNetworkEnabled) {
             showSettingsAlert();
@@ -225,7 +226,7 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
                 isLocationPermissionGranted = false;
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
+                        MY_PERMISSIONS_REQUEST_CALL);
             } else {
                 isLocationPermissionGranted = true;
                 if (isNetworkEnabled) {
@@ -237,9 +238,12 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
-                            Toast.makeText(getActivity(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
+//                            Toast.makeText(getActivity(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
                             //  sendCustomerNumberAPI(latitude, longitude);
-                            trackLocation(latitude + "," + longitude);
+                            location.setLatitude(latitude);
+                            location.setLongitude(longitude);
+                            destinationAdress1 = latitude +","+longitude;
+//                            trackLocation(latitude + "," + longitude);
                         }
                     }
                 }
@@ -256,8 +260,10 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
 
-                                Toast.makeText(getActivity(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
-                                trackLocation(latitude + "," + longitude);
+//                                Toast.makeText(getActivity(), "Lat" + latitude + "  " + "Lon" + longitude, Toast.LENGTH_LONG).show();
+                                location.setLatitude(latitude);
+                                location.setLongitude(longitude);
+                                destinationAdress1 = latitude+","+longitude;
                             }
 
 
@@ -266,7 +272,7 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
                 }
             }
         }
-    }*/
+    }
 
 
     public void showSettingsAlert() {
@@ -457,6 +463,7 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permissagion was granted, yay! Do the
                     // contacts-related task you need to do.
+                    getLocation();
 
                 } else {
                     Toast.makeText(getActivity(), "You need to allow calls to get in contact with the Customer .", Toast.LENGTH_SHORT).show();
@@ -481,6 +488,8 @@ public class HomeActivity extends Fragment implements LocationListener ,OrderInf
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION ,Manifest.permission.CALL_PHONE},
                     MY_PERMISSIONS_REQUEST_CALL);
+        } else {
+            getLocation();
         }
     }
 }
